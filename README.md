@@ -1,15 +1,10 @@
-# com.joineryhq.textselect
+# TextSelect
+
+Converts some text fields to select fields, powered by native Option Groups; currently only supports Contribution Source field.
 
 ![Screenshot](/images/screenshot.png)
 
-(*FIXME: In one or two paragraphs, describe what the extension does and why one would download it. *)
-
 The extension is licensed under [GPL-3.0](LICENSE.txt).
-
-## Requirements
-
-* PHP v5.4+
-* CiviCRM (*FIXME: Version number*)
 
 ## Installation (Web UI)
 
@@ -35,10 +30,8 @@ git clone https://github.com/FIXME/com.joineryhq.textselect.git
 cv en textselect
 ```
 
-## Usage
+## Functionality
 
-(* FIXME: Where would a new user navigate to get started? What changes would they see? *)
-
-## Known Issues
-
-(* FIXME *)
+* After installing, navigate to Administer > Customize Data and Screens > TextSelect settings; here you can select the desired Option Group to use for options in supported fields.
+* After configuring, edit or create a contribution, and observe that the Source field is now a select field, with the options from the Option Group you've configured.
+* Also notice that the select field has an additional "custom value" option, which will allow you to enter freeform text if desired.

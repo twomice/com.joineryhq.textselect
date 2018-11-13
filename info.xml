@@ -1,26 +1,26 @@
 <?xml version="1.0"?>
 <extension key="com.joineryhq.textselect" type="module">
   <file>textselect</file>
-  <name>FIXME</name>
-  <description>FIXME</description>
+  <name>TextSelect</name>
+  <description>Converts some text fields to select fields; currently only supports Contribution Source field.</description>
   <license>GPL-3.0</license>
   <maintainer>
     <author>Allen Shaw</author>
     <email>allen@JoineryHQ.com</email>
   </maintainer>
   <urls>
-    <url desc="Main Extension Page">http://FIXME</url>
-    <url desc="Documentation">http://FIXME</url>
-    <url desc="Support">http://FIXME</url>
+    <url desc="Main Extension Page">https://github.com/twomice/com.joineryhq.textselect</url>
+    <url desc="Documentation">https://github.com/twomice/com.joineryhq.textselect</url>
+    <url desc="Support">https://github.com/twomice/com.joineryhq.textselect/issues</url>
     <url desc="Licensing">http://www.gnu.org/licenses/gpl-3.0.html</url>
   </urls>
   <releaseDate>2018-07-13</releaseDate>
   <version>1.0</version>
   <develStage>alpha</develStage>
   <compatibility>
-    <ver>4.7</ver>
+    <ver>5.0</ver>
   </compatibility>
-  <comments>This is a new, undeveloped module</comments>
+  <comments></comments>
   <civix>
     <namespace>CRM/Textselect</namespace>
   </civix>
