@@ -10,15 +10,57 @@ use CRM_Textselect_ExtensionUtil as E;
  */
 function textselect_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Contribute_Form_Contribution') {
-    CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.textselect', 'js/textselect.js');
-    $variables = array(
-      'options' => array(
-        'source' => array(
-          'a',
+
+    $jsonSettings = Civi::settings()->get('textselect_config');
+    $settings = json_decode($jsonSettings, TRUE);
+
+    $sourceOptionGroupId = $settings['forms']['CRM_Contribute_Form_Contribution']['fields']['source']['option_group_id'];
+    if (!empty($sourceOptionGroupId)) {
+      CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.textselect', 'js/textselect.js');
+
+      $variables = array(
+        'options' => array(
+          'source' => CRM_Core_BAO_OptionValue::getOptionValuesAssocArray($sourceOptionGroupId),
         ),
-      ),
-    );
-    CRM_Core_Resources::singleton()->addVars('com.joineryhq.textselect', $variables);
+      );
+      CRM_Core_Resources::singleton()->addVars('com.joineryhq.textselect', $variables);
+    }
+  }
+}
+
+/**
+ * Implements hook_civicrm_navigationMenu().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
+ */
+function textselect_civicrm_navigationMenu(&$menu) {
+  _textselect_get_max_navID($menu, $max_navID);
+  _textselect_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
+    'label' => ts('TextSelect settings', array('domain' => 'com.joineryhq.textselect')),
+    'name' => 'TextSelect settings',
+    'url' => 'civicrm/admin/textselect/settings',
+    'permission' => 'administer CiviCRM',
+    'operator' => 'AND',
+    'separator' => NULL,
+    'navID' => ++$max_navID,
+  ));
+  _textselect_civix_navigationMenu($menu);
+}
+
+/**
+ * For an array of menu items, recursively get the value of the greatest navID
+ * attribute.
+ * @param <type> $menu
+ * @param <type> $max_navID
+ */
+function _textselect_get_max_navID(&$menu, &$max_navID = NULL) {
+  foreach ($menu as $id => $item) {
+    if (!empty($item['attributes']['navID'])) {
+      $max_navID = max($max_navID, $item['attributes']['navID']);
+    }
+    if (!empty($item['child'])) {
+      _textselect_get_max_navID($item['child'], $max_navID);
+    }
   }
 }
 
@@ -153,19 +195,3 @@ function textselect_civicrm_preProcess($formName, &$form) {
 
 } // */
 
-/**
- * Implements hook_civicrm_navigationMenu().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- *
-function textselect_civicrm_navigationMenu(&$menu) {
-  _textselect_civix_insert_navigation_menu($menu, NULL, array(
-    'label' => E::ts('The Page'),
-    'name' => 'the_page',
-    'url' => 'civicrm/the-page',
-    'permission' => 'access CiviReport,access CiviContribute',
-    'operator' => 'OR',
-    'separator' => 0,
-  ));
-  _textselect_civix_navigationMenu($menu);
-} // */
