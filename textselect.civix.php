@@ -263,16 +263,17 @@ function _textselect_civix_find_files($dir, $pattern) {
  */
 function _textselect_civix_civicrm_managed(&$entities) {
   $mgdFiles = _textselect_civix_find_files(__DIR__, '*.mgd.php');
+  sort($mgdFiles);
   foreach ($mgdFiles as $file) {
     $es = include $file;
     foreach ($es as $e) {
       if (empty($e['module'])) {
         $e['module'] = E::LONG_NAME;
       }
-      $entities[] = $e;
       if (empty($e['params']['version'])) {
         $e['params']['version'] = '3';
       }
+      $entities[] = $e;
     }
   }
 }
@@ -456,5 +457,11 @@ function _textselect_civix_civicrm_alterSettingsFolders(&$metaDataFolders = NULL
 
 function _textselect_civix_civicrm_entityTypes(&$entityTypes) {
   $entityTypes = array_merge($entityTypes, array (
+    'CRM_Textselect_DAO_textSelectConfig' => 
+    array (
+      'name' => 'TextSelectConfig',
+      'class' => 'CRM_Textselect_DAO_textSelectConfig',
+      'table' => 'civicrm_text_select_config',
+    ),
   ));
 }

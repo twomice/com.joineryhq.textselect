@@ -9,23 +9,22 @@ use CRM_Textselect_ExtensionUtil as E;
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildForm
  */
 function textselect_civicrm_buildForm($formName, &$form) {
-  if ($formName == 'CRM_Contribute_Form_Contribution') {
-
-    $jsonSettings = Civi::settings()->get('textselect_config');
-    $settings = json_decode($jsonSettings, TRUE);
-
-    $sourceOptionGroupId = $settings['forms']['CRM_Contribute_Form_Contribution']['fields']['source']['option_group_id'];
-    if (!empty($sourceOptionGroupId)) {
-      CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.textselect', 'js/textselect.js');
-
-      $variables = array(
-        'options' => array(
-          'source' => CRM_Core_BAO_OptionValue::getOptionValuesAssocArray($sourceOptionGroupId),
-        ),
-      );
-      CRM_Core_Resources::singleton()->addVars('com.joineryhq.textselect', $variables);
-    }
+  $existing = array();
+  $sql = "SELECT * FROM civicrm_text_select_config;";
+  $dao = CRM_Core_DAO::executeQuery($sql);
+  while ($dao->fetch()) {
+    $existing[] = $dao->toArray();
   }
+  $variables = array();
+  foreach ($existing as $setting) {
+    $result = civicrm_api3('OptionValue', 'get', [
+      'sequential' => 1,
+      'option_group_id' => $setting['option_group_id'],
+    ]);
+    $variables[$setting['field_id']] = $result['values'];
+  }
+  CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.textselect', 'js/textselect.js');
+  CRM_Core_Resources::singleton()->addVars('com.joineryhq.textselect', $variables);
 }
 
 /**
@@ -38,7 +37,7 @@ function textselect_civicrm_navigationMenu(&$menu) {
   _textselect_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
     'label' => ts('TextSelect settings', array('domain' => 'com.joineryhq.textselect')),
     'name' => 'TextSelect settings',
-    'url' => 'civicrm/admin/textselect/settings',
+    'url' => 'civicrm/admin/text-select',
     'permission' => 'administer CiviCRM',
     'operator' => 'AND',
     'separator' => NULL,
@@ -194,4 +193,3 @@ function textselect_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 function textselect_civicrm_preProcess($formName, &$form) {
 
 } // */
-

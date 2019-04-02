@@ -6,4 +6,10 @@
     <title>TextSelect Settings</title>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/admin/text-select</path>
+    <page_callback>CRM_Textselect_Page_ManageTextSelect</page_callback>
+    <title>Manage Text Select</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
 </menu>

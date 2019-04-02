@@ -9,21 +9,55 @@ use CRM_Textselect_ExtensionUtil as E;
  */
 class CRM_Textselect_Form_Settings extends CRM_Core_Form {
   public function buildQuickForm() {
-    $optionGroupOptions = array('' => '') + CRM_Core_BAO_OptionValue::buildOptions('option_group_id', 'get', array('labelColumn' => 'title'));
+    $this->action = $_GET['action'];
+    $this->config_id = $_GET['id'];
+    if ($this->action == 'delete') {
+      $descriptions['delete_warning'] = ts('Are you sure you want to delete this configuration?');
+      $this->add('hidden', 'action', $this->action);
+      $this->add('hidden', 'config_id', $this->config_id);
+      $this->assign('descriptions', $descriptions);
+    }
+    else {
+      $optionGroupOptions = array('' => '') + CRM_Core_BAO_OptionValue::buildOptions('option_group_id', 'get', array('labelColumn' => 'title'));
 
-    $descriptions['contribution_source_option_group'] = ts('Option group to use for "Source" field on contributions. Leave blank to disable this feature.')
-      . ' <a href="'. CRM_Utils_System::url('civicrm/admin/options', 'reset=1') .'" target="blank">'
-      . ts('Manage option groups')
-      . '</a>';
+      $descriptions['contribution_source_option_group'] = ts('Option group to use for field')
+        . ' <a href="' . CRM_Utils_System::url('civicrm/admin/options', 'reset=1') . '" target="blank">'
+        . ts('Manage option groups')
+        . '</a>';
 
-    // add form elements
-    $this->add(
-      'select', // field type
-      'contribution_source_option_group', // field name
-      'Option grouip for Contribution "Source" field', // field label
-      $optionGroupOptions, // list of options
-      FALSE // is required
-    );
+      // add form elements
+      $this->add(
+        'select', // field type
+        'option_group_id', // field name
+        'Option group', // field label
+        $optionGroupOptions, // list of options
+        TRUE // is required
+      );
+
+      $results = civicrm_api3('CustomField', 'get', [
+        'sequential' => 1,
+        'data_type' => "String",
+        'html_type' => "Text",
+      ]);
+
+      $fieldarr = array();
+      foreach ($results['values'] as $value) {
+        $fieldarr[$value['id']] = $value['label'];
+      }
+      //continue to support contribution source
+      $fieldarr['contribution_source'] = ts('Contribution Source');
+
+      $this->add(
+        'select', // field type
+        'field_id', // field name
+        'Field', // field label
+        $fieldarr, // list of options
+        TRUE // is required
+      );
+
+      $this->add('hidden', 'action', $this->action);
+      $this->add('hidden', 'calendar_id', $this->config_id);
+    }
     $this->addButtons(array(
       array(
         'type' => 'submit',
@@ -37,35 +71,49 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
     $this->assign('descriptions', $descriptions);
     parent::buildQuickForm();
   }
-  
+
   /**
    * Set defaults for form.
    *
    * @see CRM_Core_Form::setDefaultValues()
    */
-  function setDefaultValues() {
-    $jsonSettings = Civi::settings()->get('textselect_config');
-    $settings = json_decode($jsonSettings, TRUE);
-
-    $ret = array(
-      'contribution_source_option_group' => $settings['forms']['CRM_Contribute_Form_Contribution']['fields']['source']['option_group_id'],
-    );
-    return $ret;
-    
-    $domainID = CRM_Core_Config::domainID();
-    $ret = CRM_Utils_Array::value($domainID, $result['values']);
-    return $ret;
+  public function setDefaultValues() {
+    if ($this->config_id && ($this->action != 'delete')) {
+      $existing = array();
+      $sql = "SELECT * FROM civicrm_text_select_config WHERE id = {$this->config_id};";
+      $dao = CRM_Core_DAO::executeQuery($sql);
+      while ($dao->fetch()) {
+        $existing[] = $dao->toArray();
+      }
+      $defaults = array();
+      foreach ($existing as $name => $value) {
+        $defaults[$name] = $value;
+      }
+    }
+    return $defaults[0];
   }
 
   public function postProcess() {
-    $values = $this->exportValues();
+    $submitted = $this->exportValues();
+    if ($submitted['action'] == 'add') {
+      $sql = "INSERT INTO civicrm_text_select_config(option_group_id, field_id)
+       VALUES ('{$submitted['option_group_id']}', '{$submitted['field_id']}');";
+      $dao = CRM_Core_DAO::executeQuery($sql);
+    }
 
-    $settings = array();
-    $settings['forms']['CRM_Contribute_Form_Contribution']['fields']['source']['option_group_id'] = $values['contribution_source_option_group'];
-    $jsonSettings = json_encode($settings);
-    Civi::settings()->set('textselect_config', $jsonSettings);
-    crm_core_session::setStatus(ts('Settings were saved.'), 'Saved', 'success');
-    CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/admin/textselect/settings', 'reset=1'));
+    if ($submitted['action'] == 'update') {
+      $sql = "UPDATE civicrm_text_select_config
+       SET option_group_id = '{$submitted['option_group_id']}', field_id = '{$submitted['field_id']}'
+       WHERE `id` = {$submitted['config_id']};";
+      $dao = CRM_Core_DAO::executeQuery($sql);
+    }
+
+    if ($submitted['action'] == 'delete') {
+      $sql = "DELETE FROM civicrm_text_select_config WHERE `id` = '{$submitted['config_id']}';";
+      $dao = CRM_Core_DAO::executeQuery($sql);
+    }
+
+    CRM_Core_Session::setStatus(ts('Settings have been saved.'), ts('Saved'), 'success');
     parent::postProcess();
   }
 

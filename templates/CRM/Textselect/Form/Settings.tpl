@@ -10,6 +10,13 @@
   </div>
 {/foreach}
 
+<div class="crm-section">
+  <div>
+    {if $descriptions.delete_warning}<br /><span id="delete_warning" class="description">{$descriptions.delete_warning}</span>{/if}
+  </div>
+  <div class="clear"></div>
+</div>
+
 {* FIELD EXAMPLE: OPTION 2 (MANUAL LAYOUT)
 
   <div>
