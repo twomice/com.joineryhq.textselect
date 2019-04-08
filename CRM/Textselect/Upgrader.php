@@ -6,6 +6,33 @@ use CRM_Textselect_ExtensionUtil as E;
  */
 class CRM_Textselect_Upgrader extends CRM_Textselect_Upgrader_Base {
 
+  public function upgrade_0001() {
+    $this->ctx->log->info('Applying update 0001');
+    $sql = "CREATE TABLE IF NOT EXISTS `civicrm_text_select_config` (
+      `id` int unsigned NOT NULL AUTO_INCREMENT ,
+      `option_group_id` int unsigned ,
+      `field_id` varchar(255)
+ ,
+         PRIMARY KEY (`id`)
+ ,
+ CONSTRAINT FK_civicrm_text_select_config_option_group_id FOREIGN KEY (`option_group_id`) REFERENCES `civicrm_option_group`(`id`) ON DELETE CASCADE
+    );";
+    CRM_Core_DAO::executeQuery($sql);
+
+    $result = civicrm_api3('Navigation', 'get', [
+      'sequential' => 1,
+      'url' => "civicrm/admin/textselect/settings",
+    ]);
+    if ($result['values']) {
+      $url = CRM_Utils_System::url('civicrm/admin/text-select', 'reset=1');
+      $newmenulink = civicrm_api3('Navigation', 'create', [
+        'id' => $result['values'][0]['id'],
+        'url' => $url,
+      ]);
+    }
+    CRM_Core_Session::setStatus(ts('You may need to clear caches and reset paths as some menu items have changed'), ts('Success'), 'success');
+    return TRUE;
+  }
   // By convention, functions that look like "function upgrade_NNNN()" are
   // upgrade tasks. They are executed in order (like Drupal's hook_update_N).
 
