@@ -47,9 +47,10 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
     $jsonSettings = Civi::settings()->get('textselect_config');
     $settings = json_decode($jsonSettings, TRUE);
 
-    $ret = array(
-      'contribution_source_option_group' => $settings['forms']['CRM_Contribute_Form_Contribution']['fields']['source']['option_group_id'],
-    );
+    $ret = array();
+    if (!empty($settings['forms']['CRM_Contribute_Form_Contribution']['fields']['source']['option_group_id'])) {
+      $ret['contribution_source_option_group'] = $settings['forms']['CRM_Contribute_Form_Contribution']['fields']['source']['option_group_id'];
+    }
     return $ret;
     
     $domainID = CRM_Core_Config::domainID();
