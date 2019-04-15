@@ -21,22 +21,22 @@
         <thead>
         <tr>
           <th id="sortable">{ts}ID{/ts}</th>
-          <th id="sortable">{ts}Option Group{/ts}</th>
           <th id="sortable">{ts}Field{/ts}</th>
+          <th id="sortable">{ts}Option Group{/ts}</th>
           <th></th>
         </tr>
         </thead>
         {foreach from=$rows item=row}
         <tr id="textselect-{$row.id}" class="crm-entity {cycle values="odd-row,even-row"} {$row.class}{if NOT $row.is_active} disabled{/if} ">
             <td class="crm-textselect-id" data-field="id">{$row.id}</td>
-            {crmAPI var='result' entity='OptionGroup' action='getsingle' sequential=0 return="title" id=$row.option_group_id}
-            <td class="crm-textselect-optiongroup" data-field="option_group_id">{$result.title} (ID: {$row.option_group_id})</td>
             {if $row.field_id !== 'contribution_source'}
               {crmAPI var='result' entity='CustomField' action='getsingle' sequential=0 return="label" id=$row.field_id}
               <td class="crm-textselect-fieldid" data-field="field_id">{$result.label} (ID: {$row.field_id})</td>
             {else}
               <td class="crm-textselect-fieldid" data-field="field_id">Contribution Source (ID: {$row.field_id})</td>
             {/if}
+            {crmAPI var='result' entity='OptionGroup' action='getsingle' sequential=0 return="title" id=$row.option_group_id}
+            <td class="crm-textselect-optiongroup" data-field="option_group_id">{$result.title} (ID: {$row.option_group_id})</td>
             <td>{$row.action|replace:'xx':$row.id}</td>
         </tr>
         {/foreach}

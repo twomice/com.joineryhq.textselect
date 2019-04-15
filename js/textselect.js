@@ -48,7 +48,7 @@
       jqEl
         .hide()
         .before('\
-          <select class="crm-form-select" id="com-joineryhq-textselect-' + id + '">\n\
+          <select class="crm-form-select crm-select2" id="com-joineryhq-textselect-' + id + '">\n\
             <option></option>\n\
           </select>\n\
         ');

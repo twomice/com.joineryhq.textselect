@@ -26,32 +26,37 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
         . '</a>';
 
       // add form elements
-      $this->add(
-        'select', // field type
-        'option_group_id', // field name
-        'Option group', // field label
-        $optionGroupOptions, // list of options
-        TRUE // is required
-      );
 
       $results = civicrm_api3('CustomField', 'get', [
         'sequential' => 1,
         'data_type' => "String",
         'html_type' => "Text",
+        'is_view' => 0,
       ]);
 
       $fieldarr = array();
       foreach ($results['values'] as $value) {
-        $fieldarr[$value['id']] = $value['label'];
+        $group = civicrm_api3('CustomGroup', 'getsingle', [
+          'id' => $value['custom_group_id'],
+        ]);
+        $fieldarr[$value['id']] = $group['title'] . " :: " . $value['label'];
       }
       //continue to support contribution source
-      $fieldarr['contribution_source'] = ts('Contribution Source');
-
+      $fieldarr['contribution_source'] = ts('[native] :: Contribution Source');
+      sort($fieldarr);
       $this->add(
         'select', // field type
         'field_id', // field name
         'Field', // field label
         $fieldarr, // list of options
+        TRUE // is required
+      );
+
+      $this->add(
+        'select', // field type
+        'option_group_id', // field name
+        'Option group', // field label
+        $optionGroupOptions, // list of options
         TRUE // is required
       );
 
