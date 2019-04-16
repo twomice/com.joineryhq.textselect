@@ -12,13 +12,8 @@
   }
 
   var handleSelectChange = function handleSelectChange(e){
-    var id = e.data.id;
+    var jqEl = e.data.jqEl;
 
-    jqEl = CRM.$('input#' + id);
-    //If jqEl doesn't find anything, look harder
-    if (jqEl.length == 0) {
-      jqEl = CRM.$('input[id^="' + id + '"]');
-    }
     if (this.value == customPlaceholder){
       jqEl.val(customValues[id]);
       jqEl.show();
@@ -41,7 +36,12 @@
     var jqEl = CRM.$('input#' + id);
     //If jqEl doesn't find anything, look harder
     if (jqEl.length == 0) {
-      jqEl = CRM.$('input[id^="' + id + '"]');
+      jqEl = CRM.$('input[id^="' + id + '_"]');
+    }
+    //If jqEl still doesn't find anything, give up.
+    if (jqEl.length == 0) {
+      console.log('could not find id', id)
+      continue;
     }
     //Bugfix for contribution source field duplicated. Only do this if we haven't already for the element we found
     if ($('#com-joineryhq-textselect-' + id).length == 0) {
@@ -72,7 +72,7 @@
           customValues[id] = jqEl.val();
           jqEl.show();
         }
-        CRM.$('select#com-joineryhq-textselect-' + id).change({'id': id}, handleSelectChange);
+        CRM.$('select#com-joineryhq-textselect-' + id).change({'jqEl': jqEl}, handleSelectChange);
         jqEl.keyup(handleTextKeyup);
       }
     }
