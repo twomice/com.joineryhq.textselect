@@ -43,7 +43,7 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
       }
       //continue to support contribution source
       $fieldarr['contribution_source'] = ts('[native] :: Contribution Source');
-      sort($fieldarr);
+      asort($fieldarr);
       $this->add(
         'select', // field type
         'field_id', // field name
