@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/Textselect</base>
+  <class>TextSelectConfig</class>
+  <name>civicrm_text_select_config</name>
+  <comment></comment>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique TextSelectConfig ID</comment>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+
+  <field>
+    <name>option_group_id</name>
+    <type>int unsigned</type>
+    <comment>FK to Option Group</comment>
+  </field>
+  <foreignKey>
+    <name>id</name>
+    <table>civicrm_option_group</table>
+    <key>id</key>
+    <onDelete>CASCADE</onDelete>
+  </foreignKey>
+
+  <field>
+    <name>field_id</name>
+    <type>varchar(255)</type>
+    <comment>custom field ID</comment>
+  </field>
+
+</table>

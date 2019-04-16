@@ -1,20 +1,24 @@
 (function ($, ts) {
-
-  var fieldIds = ['source'];
+  //CRM.vars['com.joineryhq.textselect'] is now an array of [field_id => option_group_id]
+  //Here we just break off the field ids to loop over
+  var fieldIds = $.map(CRM.vars['com.joineryhq.textselect'], function(element,index) {return index});
   var customPlaceholder = 'com-joineryhq-textselect-custom';
   var customPlaceholderLabel = ts('Custom value');
   var customValues = {}
-  
+
   var handleTextKeyup = function handleTextKeyup(e){
     id = this.id;
     customValues[id] = this.value;
   }
-  
+
   var handleSelectChange = function handleSelectChange(e){
     var id = e.data.id;
-    
+
     jqEl = CRM.$('input#' + id);
-    
+    //If jqEl doesn't find anything, look harder
+    if (jqEl.length == 0) {
+      jqEl = CRM.$('input[id^="' + id + '"]');
+    }
     if (this.value == customPlaceholder){
       jqEl.val(customValues[id]);
       jqEl.show();
@@ -24,40 +28,53 @@
       jqEl.val(this.value);
     }
   }
-  
-  for (i in fieldIds) {
-    var id = fieldIds[i];
-    var jqEl = CRM.$('input#' + id)
-    jqEl
-      .hide()
-      .before('\
-        <select class="crm-form-select crm-select2" id="com-joineryhq-textselect-' + id + '">\n\
-          <option></option>\n\
-        </select>\n\
-      ');
-    
-    CRM.$.each(CRM.vars['com.joineryhq.textselect'].options[id], function(key, value) {
-      CRM.$('select#com-joineryhq-textselect-' + id)
-        .append($("<option></option>")
-        .attr("value", value)
-        .text(value));
-      if (value == jqEl.val()) {
-        CRM.$('select#com-joineryhq-textselect-' + id).val(value);
-      }
-    });
-    CRM.$('select#com-joineryhq-textselect-' + id)
-      .append($("<option></option>")
-      .attr("value", customPlaceholder)
-      .text('(' + customPlaceholderLabel + ')'));
-      
-    if (jqEl.val() && !CRM.$('select#com-joineryhq-textselect-' + id).val()) {
-      CRM.$('select#com-joineryhq-textselect-' + id).val(customPlaceholder);
-      customValues[id] = jqEl.val();
-      jqEl.show();
+
+  for (var i = 0; i < fieldIds.length; i++) {
+    //Continue to support contribution source
+    if (fieldIds[i] == 'contribution_source') {
+      var id = 'source';
     }
-    
-    CRM.$('select#com-joineryhq-textselect-' + id).change({'id': id}, handleSelectChange);
-    jqEl.keyup(handleTextKeyup);
-  }
-  
+    //Support custom fields
+    else {
+      var id = 'custom_' + fieldIds[i];
+    }
+    var jqEl = CRM.$('input#' + id);
+    //If jqEl doesn't find anything, look harder
+    if (jqEl.length == 0) {
+      jqEl = CRM.$('input[id^="' + id + '"]');
+    }
+    //Bugfix for contribution source field duplicated. Only do this if we haven't already for the element we found
+    if ($('#com-joineryhq-textselect-' + id).length == 0) {
+      jqEl
+        .hide()
+        .before('\
+          <select class="crm-form-select crm-select2" id="com-joineryhq-textselect-' + id + '">\n\
+            <option></option>\n\
+          </select>\n\
+        ');
+
+        //Once we have the option values... we can continue with processing fields with values
+        CRM.$.each(CRM.vars['com.joineryhq.textselect'][fieldIds[i]], function(key, value) {
+          CRM.$('select#com-joineryhq-textselect-' + id)
+            .append($("<option></option>")
+            .attr("value", value.label)
+            .text(value.label));
+          if (value.label == jqEl.val()) {
+            CRM.$('select#com-joineryhq-textselect-' + id).val(value.label);
+          }
+        });
+        CRM.$('select#com-joineryhq-textselect-' + id)
+          .append($("<option></option>")
+          .attr("value", customPlaceholder)
+          .text('(' + customPlaceholderLabel + ')'));
+        if (jqEl.val() && !CRM.$('select#com-joineryhq-textselect-' + id).val()) {
+          CRM.$('select#com-joineryhq-textselect-' + id).val(customPlaceholder);
+          customValues[id] = jqEl.val();
+          jqEl.show();
+        }
+        CRM.$('select#com-joineryhq-textselect-' + id).change({'id': id}, handleSelectChange);
+        jqEl.keyup(handleTextKeyup);
+      }
+    }
+
 })(CRM.$, CRM.ts('com.joineryhq.textselect'));
