@@ -1,6 +1,9 @@
 # TextSelect
 
-Converts some text fields to select fields, powered by native Option Groups; currently only supports Contribution Source field.
+Converts some text fields to select fields, powered by native Option Groups; currently supports:
+
+* Contribution Source field
+* All custom fields where Input Field Type is "Text"
 
 ![Screenshot](/images/screenshot.png)
 
@@ -33,5 +36,7 @@ cv en textselect
 ## Functionality
 
 * After installing, navigate to Administer > Customize Data and Screens > TextSelect settings; here you can select the desired Option Group to use for options in supported fields.
-* After configuring, edit or create a contribution, and observe that the Source field is now a select field, with the options from the Option Group you've configured.
+* After configuring, edit or create an entity having the field you've configured.
+  * If you've configured TextSelect to handle the Contribution Source field, you'll see that the Source field for a Contribution is now a select field, with the options from the Option Group you've configured.
+  * If you've configured TextSelect for any other custom Text field, you'll see that field is now a select field, with the options from the Option Group you've configured.
 * Also notice that the select field has an additional "custom value" option, which will allow you to enter freeform text if desired.
