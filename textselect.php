@@ -9,20 +9,9 @@ use CRM_Textselect_ExtensionUtil as E;
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildForm
  */
 function textselect_civicrm_buildForm($formName, &$form) {
-  $existing = array();
-  $sql = "SELECT * FROM civicrm_text_select_config;";
-  $dao = CRM_Core_DAO::executeQuery($sql);
-  while ($dao->fetch()) {
-    $existing[] = $dao->toArray();
-  }
-  $variables = array();
-  foreach ($existing as $setting) {
-    $result = civicrm_api3('OptionValue', 'get', [
-      'sequential' => 1,
-      'option_group_id' => $setting['option_group_id'],
-    ]);
-    $variables[$setting['field_id']] = $result['values'];
-  }
+  $variables = array(
+    'allFieldOptions' => CRM_Textselect_Util::getAllFieldOptions(),
+  );
   CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.textselect', 'js/textselect.js');
   CRM_Core_Resources::singleton()->addVars('com.joineryhq.textselect', $variables);
 }

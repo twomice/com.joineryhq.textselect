@@ -1,7 +1,8 @@
 (function ($, ts) {
-  //CRM.vars['com.joineryhq.textselect'] is now an array of [field_id => option_group_id]
+  //CRM.vars['com.joineryhq.textselect']['allFieldOptions'] is now an array of [field_id => option_group_id]
   //Here we just break off the field ids to loop over
-  var fieldIds = $.map(CRM.vars['com.joineryhq.textselect'], function(element,index) {return index});
+  var fieldIds = $.map(CRM.vars['com.joineryhq.textselect']['allFieldOptions'], function(element,index) {return index});
+  console.log('fieldIds', fieldIds);
   var customPlaceholder = 'com-joineryhq-textselect-custom';
   var customPlaceholderLabel = ts('Custom value');
   var customValues = {}
@@ -54,7 +55,7 @@
         ');
 
         //Once we have the option values... we can continue with processing fields with values
-        CRM.$.each(CRM.vars['com.joineryhq.textselect'][fieldIds[i]], function(key, value) {
+        CRM.$.each(CRM.vars['com.joineryhq.textselect']['allFieldOptions'][fieldIds[i]], function(key, value) {
           CRM.$('select#com-joineryhq-textselect-' + id)
             .append($("<option></option>")
             .attr("value", value.label)
