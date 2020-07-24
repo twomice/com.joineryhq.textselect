@@ -1,7 +1,7 @@
 <?php
 
 require_once 'textselect.civix.php';
-use CRM_Textselect_ExtensionUtil as E;
+// use CRM_Textselect_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_buildForm().
@@ -178,7 +178,7 @@ function textselect_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  * Implements hook_civicrm_preProcess().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
-function textselect_civicrm_preProcess($formName, &$form) {
+ */
+// function textselect_civicrm_preProcess($formName, &$form) {
 
-} // */
+// } // */

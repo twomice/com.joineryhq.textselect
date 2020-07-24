@@ -6,6 +6,7 @@
  * @author as
  */
 class CRM_Textselect_Util {
+
   public static function getAllFieldOptions() {
     $existing = array();
     $sql = "SELECT * FROM civicrm_text_select_config;";
