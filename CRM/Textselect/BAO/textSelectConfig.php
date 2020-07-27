@@ -1,8 +1,6 @@
 <?php
+use CRM_Textselect_ExtensionUtil as E;
 
-/**
- * use CRM_Textselect_ExtensionUtil as E;
- */
 class CRM_Textselect_BAO_textSelectConfig extends CRM_Textselect_DAO_textSelectConfig {
 
   /**

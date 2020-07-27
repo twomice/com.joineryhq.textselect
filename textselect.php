@@ -1,7 +1,7 @@
 <?php
 
 require_once 'textselect.civix.php';
-// use CRM_Textselect_ExtensionUtil as E;
+use CRM_Textselect_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_buildForm().

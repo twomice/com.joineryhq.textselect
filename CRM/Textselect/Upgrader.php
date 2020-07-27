@@ -1,5 +1,5 @@
 <?php
-// use CRM_Textselect_ExtensionUtil as E;
+use CRM_Textselect_ExtensionUtil as E;
 
 /**
  * Collection of upgrade steps.
