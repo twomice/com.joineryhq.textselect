@@ -11,6 +11,6 @@ return array(
     'is_domain' => 1,
     'is_contact' => 0,
     'description' => ts('All settings stored as json'),
-    'title' =>  ts('Textselect config'),
+    'title' => ts('Textselect config'),
   ),
- );
+);

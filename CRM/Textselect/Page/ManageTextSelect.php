@@ -4,7 +4,7 @@ use CRM_Textselect_ExtensionUtil as E;
 class CRM_Textselect_Page_ManageTextSelect extends CRM_Core_Page_Basic {
   public $useLivePageJS = TRUE;
 
-  static $_links = NULL;
+  public static $_links = NULL;
 
   public function getBAOName() {
     return 'CRM_Textselect_BAO_textSelectConfig';

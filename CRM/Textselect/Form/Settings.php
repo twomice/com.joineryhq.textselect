@@ -8,6 +8,7 @@ use CRM_Textselect_ExtensionUtil as E;
  * @see https://wiki.civicrm.org/confluence/display/CRMDOC/QuickForm+Reference
  */
 class CRM_Textselect_Form_Settings extends CRM_Core_Form {
+
   public function buildQuickForm() {
     $this->action = $_GET['action'];
     $this->config_id = $_GET['id'];
@@ -45,19 +46,29 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
       $fieldarr['contribution_source'] = ts('[native] :: Contribution Source');
       asort($fieldarr);
       $this->add(
-        'select', // field type
-        'field_id', // field name
-        'Field', // field label
-        $fieldarr, // list of options
-        TRUE // is required
+        // field type
+        'select',
+        // field name
+        'field_id',
+        // field label
+        'Field',
+        // list of options
+        $fieldarr,
+        // is required
+        TRUE
       );
 
       $this->add(
-        'select', // field type
-        'option_group_id', // field name
-        'Option group', // field label
-        $optionGroupOptions, // list of options
-        TRUE // is required
+        // field type
+        'select',
+        // field name
+        'option_group_id',
+        // field label
+        'Option group',
+        // list of options
+        $optionGroupOptions,
+        // is required
+        TRUE
       );
 
       $this->add('hidden', 'action', $this->action);
@@ -121,7 +132,6 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
     CRM_Core_Session::setStatus(ts('Settings have been saved.'), ts('Saved'), 'success');
     parent::postProcess();
   }
-
 
   /**
    * Get the fields/elements defined in this form.
