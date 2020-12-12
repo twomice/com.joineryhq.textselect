@@ -24,7 +24,7 @@ function textselect_civicrm_buildForm($formName, &$form) {
 function textselect_civicrm_navigationMenu(&$menu) {
   _textselect_get_max_navID($menu, $max_navID);
   _textselect_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
-    'label' => ts('TextSelect settings', array('domain' => 'com.joineryhq.textselect')),
+    'label' => E::ts('TextSelect settings', array('domain' => 'com.joineryhq.textselect')),
     'name' => 'TextSelect settings',
     'url' => 'civicrm/admin/text-select',
     'permission' => 'administer CiviCRM',

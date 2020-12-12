@@ -10,7 +10,7 @@ return array(
     'add' => '5.0',
     'is_domain' => 1,
     'is_contact' => 0,
-    'description' => ts('All settings stored as json'),
-    'title' => ts('Textselect config'),
+    'description' => E::ts('All settings stored as json'),
+    'title' => E::ts('Textselect config'),
   ),
 );
