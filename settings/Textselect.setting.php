@@ -1,5 +1,7 @@
 <?php
 
+use CRM_Textselect_ExtensionUtil as E;
+
 return array(
   'textselect_config' => array(
     'group_name' => 'Textselect Settings',
