@@ -13,7 +13,7 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
     $this->action = $_GET['action'];
     $this->config_id = $_GET['id'];
     if ($this->action == 'delete') {
-      $descriptions['delete_warning'] = ts('Are you sure you want to delete this configuration?');
+      $descriptions['delete_warning'] = E::ts('Are you sure you want to delete this configuration?');
       $this->add('hidden', 'action', $this->action);
       $this->add('hidden', 'config_id', $this->config_id);
       $this->assign('descriptions', $descriptions);
@@ -21,9 +21,9 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
     else {
       $optionGroupOptions = array('' => '') + CRM_Core_BAO_OptionValue::buildOptions('option_group_id', 'get', array('labelColumn' => 'title'));
 
-      $descriptions['contribution_source_option_group'] = ts('Option group to use for field')
+      $descriptions['contribution_source_option_group'] = E::ts('Option group to use for field')
         . ' <a href="' . CRM_Utils_System::url('civicrm/admin/options', 'reset=1') . '" target="blank">'
-        . ts('Manage option groups')
+        . E::ts('Manage option groups')
         . '</a>';
 
       // add form elements
@@ -43,7 +43,7 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
         $fieldarr[$value['id']] = $group['title'] . " :: " . $value['label'];
       }
       //continue to support contribution source
-      $fieldarr['contribution_source'] = ts('[native] :: Contribution Source');
+      $fieldarr['contribution_source'] = E::ts('[native] :: Contribution Source');
       asort($fieldarr);
       $this->add(
         // field type
@@ -129,7 +129,7 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
       $dao = CRM_Core_DAO::executeQuery($sql);
     }
 
-    CRM_Core_Session::setStatus(ts('Settings have been saved.'), ts('Saved'), 'success');
+    CRM_Core_Session::setStatus(ts('Settings have been saved.'), E::ts('Saved'), 'success');
     parent::postProcess();
   }
 
