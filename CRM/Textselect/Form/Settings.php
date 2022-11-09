@@ -42,8 +42,10 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
         ]);
         $fieldarr[$value['id']] = $group['title'] . " :: " . $value['label'];
       }
-      //continue to support contribution source
+      // continue to support contribution source
       $fieldarr['contribution_source'] = E::ts('[native] :: Contribution Source');
+      // support contact source
+      $fieldarr['contact_source'] = E::ts('[native] :: Contact Source');
       asort($fieldarr);
       $this->add(
         // field type
