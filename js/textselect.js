@@ -24,21 +24,33 @@
     }
   };
 
-  for (var i = 0; i < fieldIds.length; i++) {
-    var id;
+  for (var f = 0; f < fieldIds.length; f++) {
+    var ids;
     //Continue to support contribution source
-    if (fieldIds[i] == 'contribution_source') {
-      id = 'source';
+    if (fieldIds[f] == 'contribution_source') {
+      ids = [
+        'source',
+        'contribution_source'
+      ];
     }
     //Support contact source
-    else if (fieldIds[i] == 'contact_source') {
-      id = 'contact_source';
+    else if (fieldIds[f] == 'contact_source') {
+      ids = ['contact_source'];
     }
     //Support custom fields
     else {
-      id = 'custom_' + fieldIds[i];
+      ids = ['custom_' + fieldIds[f]];
     }
+    var id;
+    for (var i = 0; i < ids.length; i++) {
+      if ($('#' + ids[i]).length) {
+        id = ids[i];
+        break;
+      }
+    }
+
     var jqEl = CRM.$('input#' + id);
+    console.log('el', ('input#' + id));
     //If jqEl doesn't find anything, look harder
     if (jqEl.length == 0) {
       jqEl = CRM.$('input[id^="' + id + '_"]');
@@ -59,7 +71,7 @@
         ');
 
         //Once we have the option values... we can continue with processing fields with values
-        CRM.$.each(CRM.vars['com.joineryhq.textselect'].allFieldOptions[fieldIds[i]], function(key, value) {
+        CRM.$.each(CRM.vars['com.joineryhq.textselect'].allFieldOptions[fieldIds[f]], function(key, value) {
           CRM.$('select#com-joineryhq-textselect-' + id)
             .append($("<option></option>")
             .attr("value", value.label)
