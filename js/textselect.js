@@ -30,6 +30,10 @@
     if (fieldIds[i] == 'contribution_source') {
       id = 'source';
     }
+    //Support contact source
+    else if (fieldIds[i] == 'contact_source') {
+      id = 'contact_source';
+    }
     //Support custom fields
     else {
       id = 'custom_' + fieldIds[i];
