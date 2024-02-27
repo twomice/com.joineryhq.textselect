@@ -30,7 +30,8 @@
     if (fieldIds[f] == 'contribution_source') {
       ids = [
         'source',
-        'contribution_source'
+        'contribution_source',
+        'member_source'
       ];
     }
     //Support contact source
