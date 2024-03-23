@@ -2,7 +2,7 @@
 <extension key="com.joineryhq.textselect" type="module">
   <file>textselect</file>
   <name>TextSelect</name>
-  <description>Converts some text fields to select fields; currently only supports Contribution Source field.</description>
+  <description>Allows converting some text fields to select fields; see Documentation link for list of supported fields.</description>
   <license>GPL-3.0</license>
   <maintainer>
     <author>Allen Shaw</author>
@@ -14,8 +14,8 @@
     <url desc="Support">https://github.com/twomice/com.joineryhq.textselect/issues</url>
     <url desc="Licensing">http://www.gnu.org/licenses/gpl-3.0.html</url>
   </urls>
-  <releaseDate>2021-04-20</releaseDate>
-  <version>2.0.3</version>
+  <releaseDate>2024-03-23</releaseDate>
+  <version>2.1.0</version>
   <develStage>stable</develStage>
   <compatibility>
     <ver>5.45</ver>
