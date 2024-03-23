@@ -4,7 +4,7 @@ use CRM_Textselect_ExtensionUtil as E;
 /**
  * Collection of upgrade steps.
  */
-class CRM_Textselect_Upgrader extends CRM_Textselect_Upgrader_Base {
+class CRM_Textselect_Upgrader extends CRM_Extension_Upgrader_Base {
 
   public function upgrade_0001() {
     $this->ctx->log->info('Applying update 0001');
