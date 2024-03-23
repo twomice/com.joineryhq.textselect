@@ -13,7 +13,7 @@ function textselect_civicrm_buildForm($formName, &$form) {
     'allFieldOptions' => CRM_Textselect_Util::getAllFieldOptions(),
   );
   CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.textselect', 'js/textselect.js');
-  CRM_Core_Resources::singleton()->addVars('com.joineryhq.textselect', $variables);
+  CRM_Core_Resources::singleton()->addVars('textselect', $variables);
 }
 
 /**

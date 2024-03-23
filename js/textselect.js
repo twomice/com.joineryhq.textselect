@@ -1,97 +1,146 @@
 (function ($, ts) {
-  //CRM.vars['com.joineryhq.textselect']['allFieldOptions'] is now an array of [field_id => option_group_id]
-  //Here we just break off the field ids to loop over
-  var fieldIds = $.map(CRM.vars['com.joineryhq.textselect'].allFieldOptions, function(element,index) {return index;});
-  var customPlaceholder = 'com-joineryhq-textselect-custom';
-  var customPlaceholderLabel = ts('Custom value');
-  var customValues = {};
 
-  var handleTextKeyup = function handleTextKeyup(e){
-    id = this.id;
-    customValues[id] = this.value;
+  // On-page storage for custom values, so we can revert without loosing data.
+  var customValues = {};
+  // Option value for textSelect's "custom value" option.
+  var customPlaceholderValue = 'com-joineryhq-textselect-custom';
+  // Human label for textSelect's "custom value" option.
+  var customPlaceholderLabel = ts('Custom value');
+
+  var fieldSelectors = {
+    'contribution_source': [
+      'form.CRM_Contribute_Form_Contribution #source',
+      'form.CRM_Profile_Form_Edit #contribution_source',
+      'form.crm-search-form #contribution_source'
+    ],
+    'contact_source': [
+      '#contact_source'
+    ],
+    'participant_source': [
+      'form.CRM_Event_Form_Participant #source',
+      'form.CRM_Profile_Form_Edit #participant_source',
+      'form.crm-search-form #participant_source'
+    ],
+    'member_source': [
+      'form.CRM_Member_Form_Membership #source',
+      'form.CRM_Profile_Form_Edit #member_source',
+      'form.crm-search-form #member_source'
+    ],
   };
 
-  var handleSelectChange = function handleSelectChange(e){
-    var jqEl = e.data.jqEl;
+  var storeCustomValue = function storeCustomValue (key, value) {
+    customValues[key] = value;
+  };
 
-    if (this.value == customPlaceholder){
-      jqEl.val(customValues[id]);
-      jqEl.show();
+  var getStoredCustomValue = function getStoredCustomValue(key) {
+    return customValues[key];
+  };
+
+  /**
+   * Keyup event handler for native text field (when it's displayed, we want to
+   * respond in certain ways to user input).
+   */
+  var handleNativeTextKeyup = function handleNativeTextKeyup(e){
+    nativeElementId = this.id;
+    storeCustomValue(nativeElementId, this.value);
+  };
+
+  /**
+   * On-Change handler for textSelect. Modify value of, and/or show/hide, native
+   * text field.
+   */
+  var handleTextSelectChange = function handleTextSelectChange(e){
+    var nativeElementJq = e.data.nativeElementJq;
+
+    // We've just changed the selection in textSelect. Respond accordingly.
+    if (this.value == customPlaceholderValue){
+      // If we've selected "custom value", then:
+      // Restore any previous custom value to the native text field.
+      var customValue = getStoredCustomValue(nativeElementJq.attr('id'));
+      nativeElementJq.val(customValue);
+      // Display the native text field.
+      nativeElementJq.show();
     }
     else {
-      jqEl.hide();
-      jqEl.val(this.value);
+      // Otherwise, we're using one of our pre-set options.
+      // Hide the native text field.
+      nativeElementJq.hide();
+      // Set the native text field to our value.
+      nativeElementJq.val(this.value);
     }
   };
 
-  for (var f = 0; f < fieldIds.length; f++) {
-    var ids;
-    //Continue to support contribution source
-    if (fieldIds[f] == 'contribution_source') {
-      ids = [
-        'source',
-        'contribution_source'
+  var initializeTextSelectElement = function initializeTextSelectElement(fieldKey, nativeElementJq) {
+    var textSelectId = 'com-joineryhq-textselect-' + nativeElementJq.attr('id');
+    if ($('#' + textSelectId).length) {
+      // Our textSelect already extists, so nativeElementJq is already initialized. Just return;
+      return;
+    }
+
+    nativeElementJq
+      .hide()
+      // jshint multistr: true
+      .before('\
+        <select class="crm-form-select crm-select2" id="' + textSelectId + '">\n\
+          <option></option>\n\
+        </select>\n\
+      ');
+    var textSelectJq = $('#' + textSelectId);
+
+    // Add all options to our textSelect
+    for(var i in CRM.vars.textselect.allFieldOptions[fieldKey]) {
+      var option = CRM.vars.textselect.allFieldOptions[fieldKey][i];
+      textSelectJq
+        .append($("<option></option>")
+        .attr("value", option.label)
+        .text(option.label));
+      // Select this value in the textSelect, if it's the same as the native text value.
+      if (option.label == nativeElementJq.val()) {
+        textSelectJq.val(option.label);
+      }
+    };
+
+    // Append a "custom value" option to the textSelect.
+    textSelectJq
+      .append($("<option></option>")
+      .attr("value", customPlaceholderValue)
+      .text('(' + customPlaceholderLabel + ')'));
+
+    // If the native text has a value, AND it is not already selected in textSelect,
+    // then it must not exist in textSelect. Therefore, set textSelect to "custom
+    // value", and display the native text. Also store the native text value
+    // in our "customValues" array for later reference.
+    if (nativeElementJq.val() && !textSelectJq.val()) {
+      textSelectJq.val(customPlaceholderValue);
+      nativeElementJq.show();
+      storeCustomValue(nativeElementJq.attr('id'), nativeElementJq.val());
+    }
+
+    // Set the change handler for textSelect.
+    textSelectJq.change({'nativeElementJq': nativeElementJq}, handleTextSelectChange);
+    // Set the keyup handler for native text.
+    nativeElementJq.keyup(handleNativeTextKeyup);
+  };
+
+  for (var fieldKey in CRM.vars.textselect.allFieldOptions) {
+    if ((parseInt(fieldKey) == fieldKey)) {
+      // fieldKey is a number; treat it as custom_field_id
+      selectors = [
+        '#custom_' + fieldKey,
+        // Custom fields sometimes present as custom_[field_id]_[integer]
+        'input[id^="custom_' + fieldKey + '_"]',
       ];
     }
-    //Support contact source
-    else if (fieldIds[f] == 'contact_source') {
-      ids = ['contact_source'];
-    }
-    //Support custom fields
     else {
-      ids = ['custom_' + fieldIds[f]];
+      // Otherwise, it's one of our explicitly supported core/native fields.
+      selectors = fieldSelectors[fieldKey];
     }
-    var id;
-    for (var i = 0; i < ids.length; i++) {
-      if ($('#' + ids[i]).length) {
-        id = ids[i];
-        break;
+    for (var s in selectors) {
+      selector = selectors[s];
+      jqEl = $(selector);
+      if (jqEl.length) {
+        initializeTextSelectElement(fieldKey, jqEl);
       }
     }
-
-    var jqEl = CRM.$('input#' + id);
-    console.log('el', ('input#' + id));
-    //If jqEl doesn't find anything, look harder
-    if (jqEl.length == 0) {
-      jqEl = CRM.$('input[id^="' + id + '_"]');
-    }
-    //If jqEl still doesn't find anything, give up.
-    if (jqEl.length == 0) {
-      continue;
-    }
-    // jshint multistr: true
-    //Bugfix for contribution source field duplicated. Only do this if we haven't already for the element we found
-    if ($('#com-joineryhq-textselect-' + id).length == 0) {
-      jqEl
-        .hide()
-        .before('\
-          <select class="crm-form-select crm-select2" id="com-joineryhq-textselect-' + id + '">\n\
-            <option></option>\n\
-          </select>\n\
-        ');
-
-        //Once we have the option values... we can continue with processing fields with values
-        CRM.$.each(CRM.vars['com.joineryhq.textselect'].allFieldOptions[fieldIds[f]], function(key, value) {
-          CRM.$('select#com-joineryhq-textselect-' + id)
-            .append($("<option></option>")
-            .attr("value", value.label)
-            .text(value.label));
-          if (value.label == jqEl.val()) {
-            CRM.$('select#com-joineryhq-textselect-' + id).val(value.label);
-          }
-        });
-        CRM.$('select#com-joineryhq-textselect-' + id)
-          .append($("<option></option>")
-          .attr("value", customPlaceholder)
-          .text('(' + customPlaceholderLabel + ')'));
-        if (jqEl.val() && !CRM.$('select#com-joineryhq-textselect-' + id).val()) {
-          CRM.$('select#com-joineryhq-textselect-' + id).val(customPlaceholder);
-          customValues[id] = jqEl.val();
-          jqEl.show();
-        }
-        CRM.$('select#com-joineryhq-textselect-' + id).change({'jqEl': jqEl}, handleSelectChange);
-        jqEl.keyup(handleTextKeyup);
-      }
-    }
-
+  }
 })(CRM.$, CRM.ts('com.joineryhq.textselect'));
