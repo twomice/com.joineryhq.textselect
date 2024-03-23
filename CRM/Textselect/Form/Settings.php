@@ -11,17 +11,17 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
 
   public function buildQuickForm() {
     $this->action = $_GET['action'];
-    $this->config_id = $_GET['id'];
+    $this->id = $_GET['id'];
     if ($this->action == 'delete') {
       $descriptions['delete_warning'] = E::ts('Are you sure you want to delete this configuration?');
       $this->add('hidden', 'action', $this->action);
-      $this->add('hidden', 'config_id', $this->config_id);
+      $this->add('hidden', 'id', $this->id);
       $this->assign('descriptions', $descriptions);
     }
     else {
       $optionGroupOptions = array('' => '') + CRM_Core_BAO_OptionValue::buildOptions('option_group_id', 'get', array('labelColumn' => 'title'));
 
-      $descriptions['contribution_source_option_group'] = E::ts('Option group to use for field')
+      $descriptions['option_group_id'] = E::ts('Option group to use for this field')
         . ' <a href="' . CRM_Utils_System::url('civicrm/admin/options', 'reset=1') . '" target="blank">'
         . E::ts('Manage option groups')
         . '</a>';
@@ -59,9 +59,6 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
         // is required
         TRUE
       );
-
-      $this->add('hidden', 'action', $this->action);
-      $this->add('hidden', 'calendar_id', $this->config_id);
     }
     $this->addButtons(array(
       array(
@@ -70,6 +67,9 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
         'isDefault' => TRUE,
       ),
     ));
+
+    $this->add('hidden', 'action', $this->action);
+    $this->add('hidden', 'id', $this->id);
 
     // export form elements
     $this->assign('elementNames', $this->getRenderableElementNames());
@@ -83,42 +83,24 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
    * @see CRM_Core_Form::setDefaultValues()
    */
   public function setDefaultValues() {
-    if ($this->config_id && ($this->action != 'delete')) {
-      $existing = array();
-      $sql = "SELECT * FROM civicrm_text_select_config WHERE id = {$this->config_id};";
-      $dao = CRM_Core_DAO::executeQuery($sql);
-      while ($dao->fetch()) {
-        $existing[] = $dao->toArray();
-      }
-      $defaults = array();
-      foreach ($existing as $name => $value) {
-        $defaults[$name] = $value;
-      }
+    if ($this->id) {
+      $textSelectConfig = civicrm_api3('textSelectConfig', 'getSingle', ['id' => $this->id]);
+      return $textSelectConfig;
     }
-    return $defaults[0];
+    return [];
   }
 
   public function postProcess() {
     $submitted = $this->exportValues();
-    if ($submitted['action'] == 'add') {
-      $sql = "INSERT INTO civicrm_text_select_config(option_group_id, field_id)
-       VALUES ('{$submitted['option_group_id']}', '{$submitted['field_id']}');";
-      $dao = CRM_Core_DAO::executeQuery($sql);
+    if ($submitted['action'] == 'add' || $submitted['action'] == 'update') {
+      civicrm_api3('TextSelectConfig', 'create', $submitted);
+      CRM_Core_Session::setStatus(ts('Settings have been saved.'), E::ts('Saved'), 'success');
+    }
+    elseif ($submitted['action'] == 'delete') {
+      civicrm_api3('TextSelectConfig', 'delete', ['id' => $submitted['id']]);
+      CRM_Core_Session::setStatus(E::ts('The TextSelect Confgiuration has been deleted.'), E::ts('Deleted'), 'success');
     }
 
-    if ($submitted['action'] == 'update') {
-      $sql = "UPDATE civicrm_text_select_config
-       SET option_group_id = '{$submitted['option_group_id']}', field_id = '{$submitted['field_id']}'
-       WHERE `id` = {$submitted['config_id']};";
-      $dao = CRM_Core_DAO::executeQuery($sql);
-    }
-
-    if ($submitted['action'] == 'delete') {
-      $sql = "DELETE FROM civicrm_text_select_config WHERE `id` = '{$submitted['config_id']}';";
-      $dao = CRM_Core_DAO::executeQuery($sql);
-    }
-
-    CRM_Core_Session::setStatus(ts('Settings have been saved.'), E::ts('Saved'), 'success');
     parent::postProcess();
   }
 
