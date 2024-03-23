@@ -27,17 +27,13 @@
         </tr>
         </thead>
         {foreach from=$rows item=row}
-        <tr id="textselect-{$row.id}" class="crm-entity {cycle values="odd-row,even-row"} {$row.class}{if NOT $row.is_active} disabled{/if} ">
+        <tr id="textselect-{$row.id}" class="crm-entity {cycle values="odd-row,even-row"} {$row.class}">
             <td class="crm-textselect-id" data-field="id">{$row.id}</td>
-            {if $row.field_id == 'contribution_source' && $row.field_id !== 'contact_source'}
-                <td class="crm-textselect-fieldid" data-field="field_id">Contribution Source (ID: {$row.field_id})</td>
-            {elseif $row.field_id == 'contact_source'}
-                <td class="crm-textselect-fieldid" data-field="field_id">Contact Source (ID: {$row.field_id})</td>
-            {else}
+            <td class="crm-textselect-fieldid" data-field="field_id">{$supportedNativeFieldDefinitions[$row.field_id].label}</td>
+            <td class="crm-textselect-optiongroup" data-field="option_group_id">
               {crmAPI var='result' entity='OptionGroup' action='getsingle' sequential=0 return="title" id=$row.option_group_id}
-              <td class="crm-textselect-fieldid" data-field="field_id">Contribution Source (ID: {$row.field_id})</td>
-            {/if}
-            <td class="crm-textselect-optiongroup" data-field="option_group_id">{$result.title} (ID: {$row.option_group_id})</td>
+              {$result.title} (ID: {$row.option_group_id})
+            </td>
             <td>{$row.action|replace:'xx':$row.id}</td>
         </tr>
         {/foreach}

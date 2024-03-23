@@ -10,6 +10,11 @@ class CRM_Textselect_Page_ManageTextSelect extends CRM_Core_Page_Basic {
     return 'CRM_Textselect_BAO_textSelectConfig';
   }
 
+  public function run() {
+    $this->assign('supportedNativeFieldDefinitions', CRM_Textselect_Util::getSupportedFieldDefinitions());
+    return parent::run();
+  }
+
   public function &links() {
     if (!(self::$_links)) {
       self::$_links = array(

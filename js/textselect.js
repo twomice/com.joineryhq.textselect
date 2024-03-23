@@ -7,7 +7,7 @@
   // Human label for textSelect's "custom value" option.
   var customPlaceholderLabel = ts('Custom value');
 
-  var fieldSelectors = {
+  var a = {
     'contribution_source': [
       'form.CRM_Contribute_Form_Contribution #source',
       'form.CRM_Profile_Form_Edit #contribution_source',
@@ -123,18 +123,7 @@
   };
 
   for (var fieldKey in CRM.vars.textselect.allFieldOptions) {
-    if ((parseInt(fieldKey) == fieldKey)) {
-      // fieldKey is a number; treat it as custom_field_id
-      selectors = [
-        '#custom_' + fieldKey,
-        // Custom fields sometimes present as custom_[field_id]_[integer]
-        'input[id^="custom_' + fieldKey + '_"]',
-      ];
-    }
-    else {
-      // Otherwise, it's one of our explicitly supported core/native fields.
-      selectors = fieldSelectors[fieldKey];
-    }
+    var selectors = CRM.vars.textselect.supportedFieldDefinitions[fieldKey].selectors;
     for (var s in selectors) {
       selector = selectors[s];
       jqEl = $(selector);

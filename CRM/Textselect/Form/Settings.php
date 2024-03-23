@@ -28,29 +28,12 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
 
       // add form elements
 
-      $results = civicrm_api3('CustomField', 'get', [
-        'sequential' => 1,
-        'data_type' => "String",
-        'html_type' => "Text",
-        'is_view' => 0,
-      ]);
-
-      $fieldarr = array();
-      foreach ($results['values'] as $value) {
-        $group = civicrm_api3('CustomGroup', 'getsingle', [
-          'id' => $value['custom_group_id'],
-        ]);
-        $fieldarr[$value['id']] = $group['title'] . " :: " . $value['label'];
+      // List of supported fields, as options in field_id field.
+      $fieldOptions = array();
+      // Populate field options with supported native fields.
+      foreach (CRM_Textselect_Util::getSupportedFieldDefinitions() as $supportedNativeFieldKey => $supportedNativeFieldDefinition) {
+        $fieldOptions[$supportedNativeFieldKey] = $supportedNativeFieldDefinition['label'];;
       }
-      //continue to support contribution source
-      $fieldarr['contribution_source'] = E::ts('[native] :: Contribution Source');
-      // support contact source
-      $fieldarr['contact_source'] = E::ts('[native] :: Contact Source');
-      // support participant source
-      $fieldarr['participant_source'] = E::ts('[native] :: Participant Source');
-      // support member source
-      $fieldarr['member_source'] = E::ts('[native] :: Membership Source');
-      asort($fieldarr);
       $this->add(
         // field type
         'select',
@@ -59,7 +42,7 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
         // field label
         'Field',
         // list of options
-        $fieldarr,
+        $fieldOptions,
         // is required
         TRUE
       );

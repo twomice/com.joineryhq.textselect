@@ -11,6 +11,7 @@ use CRM_Textselect_ExtensionUtil as E;
 function textselect_civicrm_buildForm($formName, &$form) {
   $variables = array(
     'allFieldOptions' => CRM_Textselect_Util::getAllFieldOptions(),
+    'supportedFieldDefinitions' => CRM_Textselect_Util::getSupportedFieldDefinitions(),
   );
   CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.textselect', 'js/textselect.js');
   CRM_Core_Resources::singleton()->addVars('textselect', $variables);
