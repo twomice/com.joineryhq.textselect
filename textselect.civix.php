@@ -474,9 +474,9 @@ function _textselect_civix_civicrm_alterSettingsFolders(&$metaDataFolders = NULL
  */
 function _textselect_civix_civicrm_entityTypes(&$entityTypes) {
   $entityTypes = array_merge($entityTypes, [
-    'CRM_Textselect_DAO_textSelectConfig' => [
+    'CRM_Textselect_DAO_TextSelectConfig' => [
       'name' => 'TextSelectConfig',
-      'class' => 'CRM_Textselect_DAO_textSelectConfig',
+      'class' => 'CRM_Textselect_DAO_TextSelectConfig',
       'table' => 'civicrm_text_select_config',
     ],
   ]);

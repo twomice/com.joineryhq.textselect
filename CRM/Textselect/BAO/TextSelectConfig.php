@@ -1,16 +1,16 @@
 <?php
 use CRM_Textselect_ExtensionUtil as E;
 
-class CRM_Textselect_BAO_textSelectConfig extends CRM_Textselect_DAO_textSelectConfig {
+class CRM_Textselect_BAO_TextSelectConfig extends CRM_Textselect_DAO_TextSelectConfig {
 
   /**
    * Create a new TextSelectConfig based on array-data
    *
    * @param array $params key-value pairs
-   * @return CRM_Textselect_DAO_textSelectConfig|NULL
+   * @return CRM_Textselect_DAO_TextSelectConfig|NULL
    */
   // public static function create($params) {
-  //   $className = 'CRM_Textselect_DAO_textSelectConfig';
+  //   $className = 'CRM_Textselect_DAO_TextSelectConfig';
   //   $entityName = 'TextSelectConfig';
   //   $hook = empty($params['id']) ? 'create' : 'edit';
 

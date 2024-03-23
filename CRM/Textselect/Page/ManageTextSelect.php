@@ -7,7 +7,7 @@ class CRM_Textselect_Page_ManageTextSelect extends CRM_Core_Page_Basic {
   public static $_links = NULL;
 
   public function getBAOName() {
-    return 'CRM_Textselect_BAO_textSelectConfig';
+    return 'CRM_Textselect_BAO_TextSelectConfig';
   }
 
   public function run() {

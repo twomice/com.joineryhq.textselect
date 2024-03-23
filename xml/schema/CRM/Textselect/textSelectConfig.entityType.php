@@ -5,7 +5,7 @@ return array(
   0 =>
   array(
     'name' => 'TextSelectConfig',
-    'class' => 'CRM_Textselect_DAO_textSelectConfig',
+    'class' => 'CRM_Textselect_DAO_TextSelectConfig',
     'table' => 'civicrm_text_select_config',
   ),
 );

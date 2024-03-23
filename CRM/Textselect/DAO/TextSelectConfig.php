@@ -12,7 +12,7 @@
 /**
  * Database access object for the EventCalendar entity.
  */
-class CRM_Textselect_DAO_textSelectConfig extends CRM_Core_DAO {
+class CRM_Textselect_DAO_TextSelectConfig extends CRM_Core_DAO {
 
   /**
    * Static instance to hold the table name.
@@ -77,8 +77,8 @@ class CRM_Textselect_DAO_textSelectConfig extends CRM_Core_DAO {
           'description' => ts('ID'),
           'required' => TRUE,
           'table_name' => 'civicrm_text_select_config',
-          'entity' => 'textSelectConfig',
-          'bao' => 'CRM_Textselect_DAO_textSelectConfig',
+          'entity' => 'TextSelectConfig',
+          'bao' => 'CRM_Textselect_DAO_TextSelectConfig',
           'localizable' => 0,
         ],
         'option_group_id' => [
@@ -87,8 +87,8 @@ class CRM_Textselect_DAO_textSelectConfig extends CRM_Core_DAO {
           'title' => ts('Option Group ID'),
           'description' => ts('Option Group ID'),
           'table_name' => 'civicrm_text_select_config',
-          'entity' => 'textSelectConfig',
-          'bao' => 'CRM_Textselect_DAO_textSelectConfig',
+          'entity' => 'TextSelectConfig',
+          'bao' => 'CRM_Textselect_DAO_TextSelectConfig',
           'localizable' => 0,
         ],
         'field_id' => [
@@ -97,8 +97,8 @@ class CRM_Textselect_DAO_textSelectConfig extends CRM_Core_DAO {
           'title' => ts('Field ID'),
           'description' => ts('Field ID'),
           'table_name' => 'civicrm_text_select_config',
-          'entity' => 'textSelectConfig',
-          'bao' => 'CRM_Textselect_DAO_textSelectConfig',
+          'entity' => 'TextSelectConfig',
+          'bao' => 'CRM_Textselect_DAO_TextSelectConfig',
           'localizable' => 0,
         ],
       ];
