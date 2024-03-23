@@ -32,7 +32,8 @@
 
   <field>
     <name>field_id</name>
-    <type>varchar(255)</type>
+    <type>varchar</type>
+    <length>255</length>
     <comment>custom field ID</comment>
   </field>
 
