@@ -1,7 +1,7 @@
 # TextSelect
 
 Allows converting some text fields to select fields, powered by native Option
-Groups; currently supports:
+Groups; currently supports these fields:
 
 * Contact Source
 * Contribution Source
