@@ -21,6 +21,7 @@ class CRM_Textselect_Util {
       $result = civicrm_api3('OptionValue', 'get', [
         'sequential' => 1,
         'option_group_id' => $setting['option_group_id'],
+        'options' => ['limit' => 0, 'sort' => 'weight'],
       ]);
       $allFieldOptions[$setting['field_id']] = $result['values'];
     }
