@@ -32,7 +32,7 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
       $fieldOptions = array();
       // Populate field options with supported native fields.
       foreach (CRM_Textselect_Util::getSupportedFieldDefinitions() as $supportedNativeFieldKey => $supportedNativeFieldDefinition) {
-        $fieldOptions[$supportedNativeFieldKey] = $supportedNativeFieldDefinition['label'];;
+        $fieldOptions[$supportedNativeFieldKey] = $supportedNativeFieldDefinition['label'];
       }
       $this->add(
         // field type
