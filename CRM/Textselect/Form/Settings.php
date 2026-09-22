@@ -19,7 +19,7 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
       $this->assign('descriptions', $descriptions);
     }
     else {
-      $optionGroupOptions = array('' => '') + CRM_Core_BAO_OptionValue::buildOptions('option_group_id', 'get', array('labelColumn' => 'title'));
+      $optionGroupOptions = ['' => ''] + CRM_Core_BAO_OptionValue::buildOptions('option_group_id', 'get', ['labelColumn' => 'title']);
 
       $descriptions['option_group_id'] = E::ts('Option group to use for this field')
         . ' <a href="' . CRM_Utils_System::url('civicrm/admin/options', 'reset=1') . '" target="blank">'
@@ -29,7 +29,7 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
       // add form elements
 
       // List of supported fields, as options in field_id field.
-      $fieldOptions = array();
+      $fieldOptions = [];
       // Populate field options with supported native fields.
       foreach (CRM_Textselect_Util::getSupportedFieldDefinitions() as $supportedNativeFieldKey => $supportedNativeFieldDefinition) {
         $fieldOptions[$supportedNativeFieldKey] = $supportedNativeFieldDefinition['label'];
@@ -60,13 +60,13 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
         TRUE
       );
     }
-    $this->addButtons(array(
-      array(
+    $this->addButtons([
+      [
         'type' => 'submit',
         'name' => E::ts('Submit'),
         'isDefault' => TRUE,
-      ),
-    ));
+      ],
+    ]);
 
     $this->add('hidden', 'action', $this->action);
     $this->add('hidden', 'id', $this->id);
@@ -114,7 +114,7 @@ class CRM_Textselect_Form_Settings extends CRM_Core_Form {
     // auto-rendered in the loop -- such as "qfKey" and "buttons".  These
     // items don't have labels.  We'll identify renderable by filtering on
     // the 'label'.
-    $elementNames = array();
+    $elementNames = [];
     foreach ($this->_elements as $element) {
       /** @var HTML_QuickForm_Element $element */
       $label = $element->getLabel();

@@ -9,14 +9,14 @@ use CRM_Textselect_ExtensionUtil as E;
 class CRM_Textselect_Util {
 
   public static function getAllFieldOptions() {
-    $existing = array();
+    $existing = [];
     $sql = "SELECT * FROM civicrm_text_select_config;";
     $dao = CRM_Core_DAO::executeQuery($sql);
     while ($dao->fetch()) {
       $existing[] = $dao->toArray();
     }
 
-    $allFieldOptions = array();
+    $allFieldOptions = [];
     foreach ($existing as $setting) {
       $result = civicrm_api3('OptionValue', 'get', [
         'sequential' => 1,

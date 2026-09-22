@@ -2,8 +2,8 @@
 
 use CRM_Textselect_ExtensionUtil as E;
 
-return array(
-  'textselect_config' => array(
+return [
+  'textselect_config' => [
     'group_name' => 'Textselect Settings',
     'group' => 'textselect',
     'name' => 'textselect_config',
@@ -14,5 +14,5 @@ return array(
     'is_contact' => 0,
     'description' => E::ts('All settings stored as json'),
     'title' => E::ts('Textselect config'),
-  ),
-);
+  ],
+];
