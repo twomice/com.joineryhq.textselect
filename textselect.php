@@ -9,10 +9,10 @@ use CRM_Textselect_ExtensionUtil as E;
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildForm
  */
 function textselect_civicrm_buildForm($formName, &$form) {
-  $variables = array(
+  $variables = [
     'allFieldOptions' => CRM_Textselect_Util::getAllFieldOptions(),
     'supportedFieldDefinitions' => CRM_Textselect_Util::getSupportedFieldDefinitions(),
-  );
+  ];
   CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.textselect', 'js/textselect.js');
   CRM_Core_Resources::singleton()->addVars('textselect', $variables);
 }
@@ -24,15 +24,15 @@ function textselect_civicrm_buildForm($formName, &$form) {
  */
 function textselect_civicrm_navigationMenu(&$menu) {
   _textselect_get_max_navID($menu, $max_navID);
-  _textselect_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
-    'label' => E::ts('TextSelect settings', array('domain' => 'com.joineryhq.textselect')),
+  _textselect_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', [
+    'label' => E::ts('TextSelect settings', ['domain' => 'com.joineryhq.textselect']),
     'name' => 'TextSelect settings',
     'url' => 'civicrm/admin/text-select',
     'permission' => 'administer CiviCRM',
     'operator' => 'AND',
     'separator' => NULL,
     'navID' => ++$max_navID,
-  ));
+  ]);
   _textselect_civix_navigationMenu($menu);
 }
 

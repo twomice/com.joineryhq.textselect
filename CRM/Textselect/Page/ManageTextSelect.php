@@ -17,20 +17,20 @@ class CRM_Textselect_Page_ManageTextSelect extends CRM_Core_Page_Basic {
 
   public function &links() {
     if (!(self::$_links)) {
-      self::$_links = array(
-        CRM_Core_Action::UPDATE => array(
+      self::$_links = [
+        CRM_Core_Action::UPDATE => [
           'name' => E::ts('Edit'),
           'url' => 'civicrm/admin/textselect/settings',
           'qs' => 'action=update&id=%%id%%&reset=1',
           'title' => E::ts('Edit Text Select Config'),
-        ),
-        CRM_Core_Action::DELETE => array(
+        ],
+        CRM_Core_Action::DELETE => [
           'name' => E::ts('Delete'),
           'url' => 'civicrm/admin/textselect/settings',
           'qs' => 'action=delete&id=%%id%%',
           'title' => E::ts('Delete Text Select Config'),
-        ),
-      );
+        ],
+      ];
     }
     return self::$_links;
   }
